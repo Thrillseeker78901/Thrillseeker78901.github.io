@@ -1,0 +1,94 @@
+let theWheel = new Winwheel({
+    'canvasId': 'wheelCanvas',
+    'numSegments': 8,
+    'segments': [
+        {'fillStyle': '#eae56f', 'text': 'Free Coffee'},
+        {'fillStyle': '#89f26e', 'text': 'Snack Voucher'},
+        {'fillStyle': '#7de6ef', 'text': 'Room Upgrade'},
+        {'fillStyle': '#e7706f', 'text': 'Late Checkout'},
+        {'fillStyle': '#eae56f', 'text': '5% Off Next Stay'},
+        {'fillStyle': '#89f26e', 'text': 'Free Drink'},
+        {'fillStyle': '#7de6ef', 'text': 'Mystery Prize'},
+        {'fillStyle': '#e7706f', 'text': 'No Prize 😢'}
+        
+
+    ],
+    'animation': {
+        'type': 'spinToStop',
+        'duration': 5,
+        'spins': 8,
+        'callbackFinished': alertPrize
+    }
+});
+let spinSound = document.getElementById("spinSound");
+let winSound = document.getElementById("winSound");
+
+
+function alertPrize(indicatedSegment) {
+    currentPrize = indicatedSegment.text;
+
+    document.getElementById("resultText").innerText = "You won: " + currentPrize + "!";
+
+    // Play sounds and confetti
+    spinSound.pause();
+    spinSound.currentTime = 0;
+    winSound.currentTime = 0;
+    winSound.play();
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+    // Show the claim form modal
+    document.getElementById("claimModal").style.display = "block";
+}
+
+function generatePrizeCode() {
+    return Math.random().toString(36).substr(2, 6).toUpperCase();
+}
+
+
+let currentPrize = ""; // Stores the prize after spin
+
+
+document.getElementById("spinButton").addEventListener("click", function () {
+    spinSound.currentTime = 0;
+    spinSound.play();
+    theWheel.startAnimation();
+});
+
+function submitClaim() {
+    const name = document.getElementById("guestName").value.trim();
+    const contact = document.getElementById("guestContact").value.trim();
+
+    if (contact === "") {
+        alert("Please enter your email or phone number.");
+        return;
+    }
+
+    // Hide modal
+    document.getElementById("claimModal").style.display = "none";
+
+    // Confirm in console
+    console.log("Submitting to Google Sheets...", name, contact, currentPrize);
+
+    // Send data to Google Sheets Web App
+    fetch("https://script.google.com/macros/s/AKfycbxGhcuubhA21zCGzU4opOaBuGUayzVHM0q8wisyIYuca0R0zq-Ua6t6UqEcpKRuyhoaeg/exec", {
+        method: "POST",
+        body: JSON.stringify({
+            name: name || "Anonymous",
+            contact: contact,
+            prize: currentPrize,
+            code: generatePrizeCode()
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.text())
+    .then(data => {
+        console.log("Server response:", data);
+        alert("Prize claimed successfully!");
+    })
+    .catch(err => {
+        console.error("Submission error:", err);
+        alert("There was a problem submitting your prize claim.");
+    });
+}

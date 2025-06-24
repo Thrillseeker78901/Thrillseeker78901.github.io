@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Prize Wheel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>🎡 Spin to Win!</h1>
+    <canvas id="wheelCanvas" width="500" height="500"></canvas>
+    <audio id="spinSound" src="assets/sounds/spin.mp3" preload="auto"></audio>
+    <audio id="winSound" src="assets/sounds/win.mp3" preload="auto"></audio>
+
+    <button id="spinButton">Spin the Wheel</button>
+    <p id="resultText"></p>
+
+    <!-- ✅ Claim Modal should go here INSIDE <body> -->
+    <div id="claimModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000bb; z-index:999;">
+      <div style="background:white; padding:20px; max-width:400px; margin:100px auto; border-radius:10px; box-shadow:0 0 10px black;">
+        <h3>Claim Your Prize</h3>
+        <label>Name (optional):</label><br>
+        <input type="text" id="guestName" style="width:100%;"><br><br>
+        <label>Email or Phone (required):</label><br>
+        <input type="text" id="guestContact" style="width:100%;"><br><br>
+        <button onclick="submitClaim()">Submit</button>
+      </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script src="winwheel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</body>
+</html>
+
