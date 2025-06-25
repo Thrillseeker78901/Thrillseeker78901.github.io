@@ -70,7 +70,7 @@ function submitClaim() {
     console.log("Submitting to Google Sheets...", name, contact, currentPrize);
 
     // Send data to Google Sheets Web App
-    fetch("https://script.google.com/macros/s/AKfycbxmIja2qOkb3rpxJ5Gn9Y2MOTFUnadWK1g7md0FTgy3qdfPqz9LWZd5W7Zk8wjUq2QkZg/exec", {
+    fetch("https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbxmIja2qOkb3rpxJ5Gn9Y2MOTFUnadWK1g7md0FTgy3qdfPqz9LWZd5W7Zk8wjUq2QkZg/exec", {
         method: "POST",
         body: JSON.stringify({
             name: name || "Anonymous",
