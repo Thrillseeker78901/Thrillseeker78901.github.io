@@ -84,3 +84,17 @@ function submitClaim() {
         alert("There was a problem submitting your prize claim.");
     });
 }
+fetch("https://script.google.com/macros/s/AKfycbxmIja2qOkb3rpxJ5Gn9Y2MOTFUnadWK1g7md0FTgy3qdfPqz9LWZd5W7Zk8wjUq2QkZg/exec", {
+    method: "POST",
+    mode: "cors",  // <-- CORS mode
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        name: name || "Anonymous",
+        contact: contact,
+        prize: currentPrize,
+        code: generatePrizeCode()
+    })
+})
+
